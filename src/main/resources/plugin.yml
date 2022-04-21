@@ -1,0 +1,6 @@
+name: TPHMC
+version: '${project.version}'
+main: com.patchespop.tphmc.TPHMC
+api-version: 1.18
+authors: [ PatchesPop ]
+description: Twitch Plays Hardcore Minecraft
