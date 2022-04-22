@@ -4,3 +4,8 @@ main: com.patchespop.tphmc.TPHMC
 api-version: 1.18
 authors: [ PatchesPop ]
 description: Twitch Plays Hardcore Minecraft
+commands:
+  autospectate:
+    description: Set self to spectate players in the world. Prioritizes players who are in the most danger
+    usage: /<command>
+    aliases: autospectate
