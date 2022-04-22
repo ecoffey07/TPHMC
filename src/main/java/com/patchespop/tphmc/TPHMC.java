@@ -2,7 +2,6 @@ package com.patchespop.tphmc;
 
 import com.patchespop.tphmc.commands.SpectatorBotCommand;
 import com.patchespop.tphmc.spectator.SpectateManager;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
