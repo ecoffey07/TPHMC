@@ -4,6 +4,7 @@ import com.patchespop.tphmc.TPHMC;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class SpectatorBotCommand implements CommandExecutor {
@@ -18,16 +19,20 @@ public class SpectatorBotCommand implements CommandExecutor {
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     System.out.println("spectatorbot command received");
     if (sender instanceof Player player) {
-      System.out.println("Testing for permissions");
       if (player.isOp() || player.hasPermission("spectatorbot")) {
-        System.out.println("");
-        // If spectateManager is already using sender as a bot, turn off spectate mode
-        if (tphmc.spectateManager.getSpectateBot() != null && tphmc.spectateManager.getSpectateBot().getUniqueId().equals(player.getUniqueId())) {
-          System.out.println("Bot is no longer spectating");
-          tphmc.spectateManager.StopSpectate();
+        boolean notNull = tphmc.spectateManager.getSpectateBot() != null;
+        if (notNull) {
+          boolean isSamePlayer = tphmc.spectateManager.getSpectateBot().getUniqueId().equals(player.getUniqueId());
+          if (isSamePlayer) {
+            player.sendMessage("You are no longer the spectate bot");
+            tphmc.spectateManager.StopSpectate();
+          }
+          else {
+            player.sendMessage("There is already a spectator bot activated");
+          }
         }
         else {
-          System.out.println("Bot is starting to spectate");
+          player.sendMessage("You are now the spectate bot");
           tphmc.spectateManager.StartSpectate(player);
         }
         return true;

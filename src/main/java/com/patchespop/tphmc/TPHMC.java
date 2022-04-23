@@ -1,6 +1,7 @@
 package com.patchespop.tphmc;
 
 import com.patchespop.tphmc.commands.SpectatorBotCommand;
+import com.patchespop.tphmc.listeners.PlayerListener;
 import com.patchespop.tphmc.spectator.SpectateManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,7 +16,13 @@ public final class TPHMC extends JavaPlugin {
     // Plugin startup logic
     System.out.println("Hi!");
 
+    // Enable commands
     Objects.requireNonNull(getCommand("autospectate")).setExecutor(new SpectatorBotCommand(this));
+
+    // Enable Listeners
+
+    getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+
     spectateManager = new SpectateManager(this);
   }
 
