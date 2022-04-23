@@ -17,7 +17,7 @@ public class SpectatorBot {
 
   }
 
-  public Player getBot() {
+  public Player getPlayer() {
     return bot;
   }
 

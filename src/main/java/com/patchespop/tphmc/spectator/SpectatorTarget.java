@@ -55,6 +55,7 @@ public class SpectatorTarget {
       double damage = previousHealth - currentHealth;
       double damagePercent = damage / previousHealth;
       heat += (int)Math.floor(damagePercent);
+      cooldownCount = 0; // Reset cooldown
     }
 
     // Now do range detections on monsters

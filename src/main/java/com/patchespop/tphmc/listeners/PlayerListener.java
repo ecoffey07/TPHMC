@@ -17,16 +17,20 @@ public class PlayerListener implements Listener {
 
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent event) {
+    System.out.println("Player death event");
     // TODO maybe move the camera to hover over the body of the deceased?
+    tphmc.gameManager.TriggerDeath(event.getEntity());
   }
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
+    System.out.println("Player join event");
     tphmc.spectateManager.AddTarget(event.getPlayer());
   }
 
   @EventHandler
   public void onPlayerLeave(PlayerQuitEvent event) {
+    System.out.println("Player quit event");
     tphmc.spectateManager.RemoveTarget(event.getPlayer());
   }
 }

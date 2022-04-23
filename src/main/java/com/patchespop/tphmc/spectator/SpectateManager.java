@@ -13,6 +13,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class SpectateManager {
 
+  private static SpectatorBotScoreboard botScoreboard;
+
   public final int THREAD_SLEEP_TIME = 1000; // 1 sec for now
   private static ArrayList<SpectatorTarget> targetList;
   private static ScheduledExecutorService exec;
@@ -22,6 +24,7 @@ public class SpectateManager {
   private static boolean debug;
 
   public SpectateManager(TPHMC tphmc) {
+    botScoreboard = new SpectatorBotScoreboard();
     spectateBot = null;
     currentTarget = null;
     SpectateManager.tphmc = tphmc;
@@ -34,10 +37,20 @@ public class SpectateManager {
     spectateBot.setBot(player);
     // Can't spectate yourself so remove the bot from targetList
     RemoveTarget(player);
+    botScoreboard.openScoreboard();
     // spawn the thread that continuously queries the monitors
     System.out.println("Starting Spectating Thread");
     exec.scheduleAtFixedRate(SpectateManager::SpectateThread, 0, THREAD_SLEEP_TIME, TimeUnit.MILLISECONDS);
     // TODO initialize spectator, set spectate game mode and start spectating a player.
+  }
+
+  public void StopSpectate() {
+    System.out.println("Stop spectating");
+    // TODO set spectateBot to survival gamemode and teleport their position to their last spectate target or 0,0 idk
+    AddTarget(spectateBot.getPlayer());
+    botScoreboard.closeScoreboard();
+    spectateBot = null;
+    exec.shutdown();
   }
 
   /**
@@ -45,7 +58,15 @@ public class SpectateManager {
    * @param target Player to be added to targetList
    */
   public synchronized void AddTarget(Player target) {
-      targetList.add(new SpectatorTarget(this, target));
+    // New target should always be unique
+    for (SpectatorTarget targets: targetList) {
+      if (targets.getTarget().getUniqueId().equals(target.getUniqueId())) {
+        System.out.println("Error placing target in targetlist, duplicate detected");
+        return;
+      }
+    }
+    System.out.println("Added " + target.getPlayerListName() + " to target list");
+    targetList.add(new SpectatorTarget(this, target));
   }
 
   /**
@@ -54,15 +75,11 @@ public class SpectateManager {
    */
   public synchronized void RemoveTarget(Player target) {
     // Check if survivor exists in scoreList and then remove the object
+    System.out.println("Removing " + target.getPlayerListName() + " from targetlist");
     targetList.removeIf(spectatorTarget -> spectatorTarget.getTarget().getUniqueId().equals(target.getUniqueId()));
   }
 
-  public void StopSpectate() {
-    // TODO set spectateBot to survival gamemode and teleport their position to their last spectate target or 0,0 idk
-    AddTarget(spectateBot.getBot());
-    spectateBot = null;
-    exec.shutdown();
-  }
+
 
   /**
    * Every iteration, query the monitors and determine the best target to spectate
@@ -74,7 +91,7 @@ public class SpectateManager {
       tphmc.getServer().getScheduler().scheduleSyncDelayedTask(tphmc, new Runnable() {
         @Override
         public void run() {
-          spectateBot.getBot().chat("THREAD TEST!!!");
+          spectateBot.getPlayer().chat("THREAD TEST!!!");
         }
       });
     } catch (Exception e) {
@@ -83,21 +100,36 @@ public class SpectateManager {
 
     // Update the danger scores for every target
     // TODO spawn a thread for each person in the targetList
+    if (targetList.size() <= 0) {
+      System.out.println("No spectators in list, returning");
+      return;
+    }
+
     for (SpectatorTarget target : targetList) {
       target.Update();
     }
 
     targetList.sort(new SpectatorTargetComparator()); // Sort by target score once all threads are finished
-    
+    botScoreboard.updateScoreboard(); // Update scoreboard to new scores
+
+    // If the highest score is greater than some threshold, force spectate that player,
+    // If the highest score is less than some threshold, spectate random players, swapping every few seconds??
+    int highestScore = targetList.get(0).getScore();
 
   }
 
   /**     GETTERS AND SETTERS!    **/
-  public Player getSpectateBot() {
-    return spectateBot.getBot();
+  public static SpectatorBot getSpectateBot() {
+    return spectateBot;
   }
 
   public static void setDebug(boolean debug) {
     SpectateManager.debug = debug;
   }
+
+  public static ArrayList<SpectatorTarget> getTargetList() {
+    return targetList;
+  }
+
+
 }

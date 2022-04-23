@@ -1,10 +1,10 @@
 package com.patchespop.tphmc.commands;
 
 import com.patchespop.tphmc.TPHMC;
+import com.patchespop.tphmc.spectator.SpectateManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class SpectatorBotCommand implements CommandExecutor {
@@ -20,9 +20,9 @@ public class SpectatorBotCommand implements CommandExecutor {
     System.out.println("spectatorbot command received");
     if (sender instanceof Player player) {
       if (player.isOp() || player.hasPermission("spectatorbot")) {
-        boolean notNull = tphmc.spectateManager.getSpectateBot() != null;
+        boolean notNull = SpectateManager.getSpectateBot() != null;
         if (notNull) {
-          boolean isSamePlayer = tphmc.spectateManager.getSpectateBot().getUniqueId().equals(player.getUniqueId());
+          boolean isSamePlayer = SpectateManager.getSpectateBot().getPlayer().getUniqueId().equals(player.getUniqueId());
           if (isSamePlayer) {
             player.sendMessage("You are no longer the spectate bot");
             tphmc.spectateManager.StopSpectate();
