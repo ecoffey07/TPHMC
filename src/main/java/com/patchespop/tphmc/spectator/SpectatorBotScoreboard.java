@@ -1,6 +1,7 @@
 package com.patchespop.tphmc.spectator;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class SpectatorBotScoreboard {
   }
 
   public void openScoreboard() {
-    SpectatorBot bot = SpectateManager.getSpectateBot();
+    Player bot = SpectateManager.getSpectateBot();
     ScoreboardManager manager = Bukkit.getScoreboardManager();
     assert manager != null;
     Scoreboard scoreboard = manager.getNewScoreboard();
@@ -19,15 +20,15 @@ public class SpectatorBotScoreboard {
     Objective objective = scoreboard.registerNewObjective("Scores", "dummy", "Danger Scores");
     objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-    bot.getPlayer().setScoreboard(scoreboard);
+    bot.setScoreboard(scoreboard);
   }
 
   /**
    * Display current players score on the scoreboard for debuggin purposes
    */
   public void updateScoreboard() {
-    SpectatorBot bot = SpectateManager.getSpectateBot();
-    Scoreboard scoreboard = bot.getPlayer().getScoreboard();
+    Player bot = SpectateManager.getSpectateBot();
+    Scoreboard scoreboard = bot.getScoreboard();
     ArrayList<SpectatorTarget> targetList = SpectateManager.getTargetList();
     Objective objective = scoreboard.getObjective("Scores");
     for (SpectatorTarget target: targetList) {
@@ -38,7 +39,7 @@ public class SpectatorBotScoreboard {
   }
 
   public void closeScoreboard() {
-    SpectatorBot bot = SpectateManager.getSpectateBot();
-    bot.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+    Player bot = SpectateManager.getSpectateBot();
+    bot.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
   }
 }
