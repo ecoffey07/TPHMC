@@ -41,7 +41,7 @@ public class SpectatorTarget {
     cooldownCount += deltaTime;
 
     // Reduce heat if applicable
-    System.out.println("Calculating heat cooldown for " + target.getPlayerListName());
+//    System.out.println("Calculating heat cooldown for " + target.getPlayerListName());
     if (cooldownCount >= HEAT_COOLDOWN) {
       if (heat - 1 < 0) {
         heat = 0;
@@ -52,7 +52,7 @@ public class SpectatorTarget {
       cooldownCount = 0;
     }
 
-    System.out.println("Heat check for " + target.getPlayerListName());
+//    System.out.println("Heat check for " + target.getPlayerListName());
     // Check if damage has been taken
     if (currentHealth < previousHealth) {
       // Target has taken damage since last check
@@ -63,7 +63,7 @@ public class SpectatorTarget {
     }
 
     // Now do range detections on monsters
-    System.out.println("Calculating mob ranges for " + target.getPlayerListName());
+//    System.out.println("Calculating mob ranges for " + target.getPlayerListName());
     Future<List<Entity>> listFuture = SpectateManager.getTPHMC().getServer().getScheduler().callSyncMethod(SpectateManager.getTPHMC(), new Callable<List<Entity>>() {
       @Override
       public List<Entity> call() throws Exception {
@@ -99,7 +99,7 @@ public class SpectatorTarget {
     int hunger = target.getFoodLevel();
     // We now have a heat level, distance to closest mob, current health, and hunger?
     // Current health affects the weighting of all the parameters
-    System.out.println("Calculating total score for: " + target.getPlayerListName());
+//    System.out.println("Calculating total score for: " + target.getPlayerListName());
     score = 0;
     double weight = 1 - (Math.round((currentHealth / Objects.requireNonNull(target.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getDefaultValue()) * 100.0) / 100.0);
     double missingHealth = Math.round((Objects.requireNonNull(target.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getDefaultValue() - currentHealth) * 100.0) / 100.0;
@@ -108,7 +108,7 @@ public class SpectatorTarget {
       score += Math.round( (MOB_DETECTION_RANGE - closestDistance) * weight);
     }
     score += Math.round(heat * weight);
-    System.out.println("Score for: " + target.getPlayerListName() + " is: " + score);
+//    System.out.println("Score for: " + target.getPlayerListName() + " is: " + score);
 
     previousHealth = currentHealth;
   }

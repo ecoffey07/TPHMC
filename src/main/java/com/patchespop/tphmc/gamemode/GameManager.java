@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 public class GameManager {
 
   TPHMC tphmc;
+  private int respawnsLeft; // Read in from xml file possibly?
 
   public GameManager(TPHMC tphmc) {
     this.tphmc = tphmc;

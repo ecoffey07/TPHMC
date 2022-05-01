@@ -1,9 +1,12 @@
 package com.patchespop.tphmc.listeners;
 
 import com.patchespop.tphmc.TPHMC;
+import com.patchespop.tphmc.spectator.SpectateManager;
+import com.patchespop.tphmc.spectator.SpectatorTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -26,6 +29,9 @@ public class PlayerListener implements Listener {
   public void onPlayerJoin(PlayerJoinEvent event) {
     System.out.println("Player join event");
     tphmc.spectateManager.AddTarget(event.getPlayer());
+    if (SpectateManager.getSpectateBot() != null) {
+      SpectateManager.getSpectateBot().Init();
+    }
   }
 
   @EventHandler

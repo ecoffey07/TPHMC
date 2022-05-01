@@ -12,7 +12,7 @@ public class SpectatorBotScoreboard {
   }
 
   public void openScoreboard() {
-    Player bot = SpectateManager.getSpectateBot();
+    Player bot = SpectateManager.getSpectateBot().getBot();
     ScoreboardManager manager = Bukkit.getScoreboardManager();
     assert manager != null;
     Scoreboard scoreboard = manager.getNewScoreboard();
@@ -23,11 +23,19 @@ public class SpectatorBotScoreboard {
     bot.setScoreboard(scoreboard);
   }
 
+  public void removePlayerFromScoreboard(Player player) {
+    Player bot = SpectateManager.getSpectateBot().getBot();
+    if (bot != null) {
+      Scoreboard scoreboard = bot.getScoreboard();
+      scoreboard.resetScores("Scores");
+    }
+  }
+
   /**
    * Display current players score on the scoreboard for debuggin purposes
    */
   public void updateScoreboard() {
-    Player bot = SpectateManager.getSpectateBot();
+    Player bot = SpectateManager.getSpectateBot().getBot();
     Scoreboard scoreboard = bot.getScoreboard();
     ArrayList<SpectatorTarget> targetList = SpectateManager.getTargetList();
     Objective objective = scoreboard.getObjective("Scores");
@@ -39,7 +47,8 @@ public class SpectatorBotScoreboard {
   }
 
   public void closeScoreboard() {
-    Player bot = SpectateManager.getSpectateBot();
+    Player bot = SpectateManager.getSpectateBot().getBot();
+    bot.getScoreboard().resetScores("Scores");
     bot.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
   }
 }

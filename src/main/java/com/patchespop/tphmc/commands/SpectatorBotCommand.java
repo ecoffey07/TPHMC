@@ -7,6 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 public class SpectatorBotCommand implements CommandExecutor {
 
   private final TPHMC tphmc;
@@ -22,7 +24,7 @@ public class SpectatorBotCommand implements CommandExecutor {
       if (player.isOp() || player.hasPermission("spectatorbot")) {
         boolean notNull = SpectateManager.getSpectateBot() != null;
         if (notNull) {
-          boolean isSamePlayer = SpectateManager.getSpectateBot().getPlayer().getUniqueId().equals(player.getUniqueId());
+          boolean isSamePlayer = Objects.requireNonNull(SpectateManager.getSpectateBot().getBot().getPlayer()).getUniqueId().equals(player.getUniqueId());
           if (isSamePlayer) {
             player.sendMessage("You are no longer the spectate bot");
             tphmc.spectateManager.StopSpectate();
